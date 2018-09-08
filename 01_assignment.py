@@ -1,10 +1,10 @@
-#'''
-#Assignment #1
-#1. Add / modify code ONLY between the marked areas (i.e. "Place code #below")
-#2. Run the associated test harness for a basic check on completeness
-#3. To run unit tests simply use the below command after filling in all #of the code:
-#    python 01_assignment.py
-#'''
+'''
+Assignment #1
+1. Add / modify code ONLY between the marked areas (i.e. "Place code #below")
+2. Run the associated test harness for a basic check on completeness
+3. To run unit tests simply use the below command after filling in all #of the code:
+    python 01_assignment.py
+'''
 import math
 import unittest
 
@@ -157,7 +157,7 @@ def exercise11():
 
     # ------ Place code below here \/ \/ \/ ------
 
-    pi = format(math.pi, '.10f')
+    pi = format(math.pi, '.10f') # or pi = round(math.pi, 2)
 
     # ------ Place code above here /\ /\ /\ ------
     return pi
