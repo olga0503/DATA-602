@@ -157,7 +157,7 @@ def exercise11():
 
     # ------ Place code below here \/ \/ \/ ------
 
-    pi = format(math.pi, '.10f') # or pi = round(math.pi, 2)
+    pi = format(math.pi, '.10f') # or pi = round(math.pi, 10)
 
     # ------ Place code above here /\ /\ /\ ------
     return pi
