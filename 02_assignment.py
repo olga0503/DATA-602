@@ -197,6 +197,10 @@ def display_menu(menu):
     #create list that stores user choices 
     user_choices=[]
     
+    #lambda function
+    my_func=lambda x: print(x)
+
+    
     def select_menu():
         #display menu onm the screen
         for count, menu_items in enumerate(My_menu,1):
@@ -204,7 +208,7 @@ def display_menu(menu):
         
         #user input     
         user_choice = input("Select a menu item 1 to " + str(len(my_menu)) + "   ")
-        print("You've selected " + str(user_choice))
+        print("You've selected " + str(my_func(menu[user_choice]))
 
 
         #validate user entry
