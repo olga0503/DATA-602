@@ -182,45 +182,45 @@ def exercise07(n):
 
 def display_menu(menu):
     
+    my_menu=menu
+    
     #verify that menu is a tuple
-    if type(menu)!= tuple:
+    if type(my_menu)!= tuple:
         return -1
     
     #convert to list
-    list(menu)
-
-    #add exit option
-    menu.append("Exit")
+    my_menu=list(my_menu)
     
-
-    #create list that stores user choices    
-    user_choices=list()
+    #add exit option
+    my_menu.append("Exit")
+    
+    #create list that stores user choices 
+    user_choices=[]
     
     def select_menu():
-
         #display menu onm the screen
-        for count, menu_items in enumerate(menu,1):
+        for count, menu_items in enumerate(My_menu,1):
              print (count,menu_items)
         
         #user input     
-        user_choice = input("Select a menu item 1 to " + str(len(menu)) + "   ")
+        user_choice = input("Select a menu item 1 to " + str(len(my_menu)) + "   ")
         print("You've selected " + str(user_choice))
 
 
         #validate user entry
         if user_choice.isdigit() == False or user_choice<1 or user_choice>len(user_choices):
-                print("Your selection is invalid. The entery should be a digit 1 to " + str(len(menu)) + "Please try again...")
+                print("Your selection is invalid. The entery should be a digit 1 to " + str(len(my_menu)) + "Please try again...")
                 return select_menu()
 
         #return 0 if user choose 'Exit' as the first selection        
-        elif int(user_choice)==len(menu) and len(user_choices)==0:
+        elif int(user_choice)==len(my_menu) and len(user_choices)==0:
                 print("Goodbuy!")
-                return 0,len(menu)
+                return 0,len(my_menu)
 
         #return previous selection and menu length when user exits         
-        elif int(user_choice)==len(menu) and len(user_choices)!=0:
+        elif int(user_choice)==len(my_menu) and len(user_choices)!=0:
                 print("Exiting... You previous selection was " + str(user_choices[-1]))
-                print(len(menu),int(user_choices[-1]))
+                print(len(my_menu),int(user_choices[-1]))
                 return int(user_choices[-1]),len(my_menu)
 
         #user makes a selection other than 'exit'        
@@ -230,6 +230,8 @@ def display_menu(menu):
             return select_menu()
                   
     return select_menu()
+
+
 
 
 # ------ Place code above here /\ /\ /\ ------
