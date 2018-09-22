@@ -198,7 +198,7 @@ def display_menu(menu):
     user_choices=[]
 
     #lambda function
-    my_func=lambda x : print(x)
+    my_func=lambda x : x
     
     def select_menu():
         #display menu onm the screen
@@ -207,9 +207,7 @@ def display_menu(menu):
         
         #user input     
         user_choice = input("Select a menu item 1 to " + str(len(my_menu)) + "   ")
-        #print("You've selected " + user_choice)
-        my_func(my_menu[int(user_choice)-1])
-
+        
 
         #validate user entry
         if user_choice.isdigit() == False or int(user_choice)<1 or int(user_choice)>len(my_menu):
@@ -229,6 +227,10 @@ def display_menu(menu):
 
         #user makes a selection other than 'exit'        
         else:
+            #execute lambda function
+            my_func._name_= my_menu[int(user_choice)-1]
+            print("Method name is " + my_func._name_)
+            print("I've selected " + my_func(my_menu[int(user_choice)-1]))
             user_choices.append(user_choice)
             #recursive call
             return select_menu()
