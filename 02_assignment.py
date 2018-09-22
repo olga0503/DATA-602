@@ -186,7 +186,7 @@ def display_menu(menu):
     
     #verify that menu is a tuple
     if type(my_menu)!= tuple:
-        return -1
+        return -1,len(my_menu)
     
     #convert to list
     my_menu=list(my_menu)
@@ -196,24 +196,24 @@ def display_menu(menu):
     
     #create list that stores user choices 
     user_choices=[]
-    
-    #lambda function
-    my_func=lambda x: print(x)
 
+    #lambda function
+    my_func=lambda x : print(x)
     
     def select_menu():
         #display menu onm the screen
-        for count, menu_items in enumerate(My_menu,1):
+        for count, menu_items in enumerate(my_menu,1):
              print (count,menu_items)
         
         #user input     
         user_choice = input("Select a menu item 1 to " + str(len(my_menu)) + "   ")
-        print("You've selected " + str(my_func(menu[user_choice]))
+        #print("You've selected " + user_choice)
+        my_func(my_menu[int(user_choice)-1])
 
 
         #validate user entry
-        if user_choice.isdigit() == False or user_choice<1 or user_choice>len(user_choices):
-                print("Your selection is invalid. The entery should be a digit 1 to " + str(len(my_menu)) + "Please try again...")
+        if user_choice.isdigit() == False or int(user_choice)<1 or int(user_choice)>len(my_menu):
+                print("Your selection is invalid. The entery should be a digit 1 to " + str(len(my_menu)) + " " + "Please try again...")
                 return select_menu()
 
         #return 0 if user choose 'Exit' as the first selection        
@@ -234,6 +234,7 @@ def display_menu(menu):
             return select_menu()
                   
     return select_menu()
+
 
 
 
