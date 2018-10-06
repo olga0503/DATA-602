@@ -72,17 +72,13 @@ class Box():
     #method that calculates area
     def get_area(self):
 
-        area = self.width * self.length
-
-        return area
+        return self.width * self.length
 
 
     #method that calculates perimeter
     def get_perimeter(self):
         
-        perimeter = 2*(self.width + self.length)
-
-        return perimeter
+        return 2*(self.width + self.length)
 
 
     #method that doubles width and length
@@ -103,9 +99,7 @@ class Box():
     #method that returns a tuple containing the length and width of the box
     def get_dim(self):
 
-        dimentions = (self.length,self.width,)
-
-        return dimentions    
+        return (self.length,self.width)   
 
 
     #method that takes another box as an argument and increases the length and width by the dimensions of the box passed in
@@ -120,9 +114,7 @@ class Box():
     #method that finds the length of the diagonal that cuts throught the middle
     def get_hypot(self):
         
-        diagonal = math.sqrt((self.length**2) + (self.width**2))
-
-        return diagonal  
+        return math.sqrt((self.length**2) + (self.width**2))  
 
 
 
