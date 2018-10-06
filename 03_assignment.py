@@ -211,13 +211,19 @@ class MangoDB:
     #prints to the screen each collection names and the collection's content underneath
     def display_all_collections(self):
         
-        #iterates through collections
-        for key,value in self.dict.items():
-                print("collection - " + str(key))
+        #verifies that collection list is not empty
+        if len(self.__dict.keys()) == 0:
+            print("Collection list is empty")
+        
+        else:
+
+            #iterates through collections
+                for key,value in self.__dict.items():
+                    print("collection - " + str(key))
                 
-                #iterates through collections items
-                for key2,value2 in self.dict[key].items():
-                     print('  ' + str(key2) + '    ' + str(self.d__ict[key].get(key2)))
+                    #iterates through collections items
+                    for key2,value2 in self.dict[key].items():
+                         print('  ' + str(key2) + '    ' + str(self.__dict[key].get(key2)))
       
     
                             
@@ -237,9 +243,15 @@ class MangoDB:
     
     #display a list of all the collections
     def list_collections(self): 
+
+        #verify that collection list is not empty
+        if len(self.__dict.keys()) == 0:
+            print("Collection list is empty")
         
-        for key,value in self.__dict.items():
-            print(key)     
+        else:
+        
+             for key,value in self.__dict.items():
+                 print(key)     
    
 
 
@@ -259,10 +271,10 @@ class MangoDB:
     def to_json(self,collection_name): 
         
         try:
-                json_file = json.dumps(self.__dict[collection_name])
-                print(json_file)
+                json_string = json.dumps(self.__dict[collection_name])
+                print(json_string)
         
-                return json_file
+                return json_string
         
         #raises Key Error if collection is not in the list of collections                    
         except: 
