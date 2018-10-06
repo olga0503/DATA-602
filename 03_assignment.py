@@ -214,7 +214,7 @@ class MangoDB:
                     print("collection - " + str(key))
                 
                     #iterates through collections items
-                    for key2,value2 in self.dict[key].items():
+                    for key2,value2 in self.__dict[key].items():
                          print('  ' + str(key2) + '    ' + str(self.__dict[key].get(key2)))
       
     
@@ -223,7 +223,6 @@ class MangoDB:
     def remove_collection(self,collection_name):
         
         try:
-                #self.dict[collection_name]
                 del self.__dict[collection_name]
                 return self
         
