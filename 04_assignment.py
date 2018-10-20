@@ -88,7 +88,7 @@ class PandasChain():
     # 5 pts - Complete this constructor
     def __init__(self,name,*args):
         
-        self.__name = name# Convert name to upper case and store it here 
+        self.__name = str.upper(name) # Convert name to upper case and store it here 
         self.__current_block = Block(args[0],args[1])# Create a new Block 
         self.__name = str.upper(name)# Convert name to upper case and store it here
         self.__chain = [] # Create an empty list
