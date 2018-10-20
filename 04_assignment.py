@@ -160,7 +160,7 @@ class PandasChain():
     
     # 5 pts - return int total number of blocks in this chain (committed and uncommitted blocks combined)
     def get_number_of_blocks(self): 
-        return len(self.__chain)
+        return len(self.__chain)+1
     
     # 10 pts - Returns all of the values (Pandas coins transferred) of all transactions from every block as a single list
     def get_values(self):
