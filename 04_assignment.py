@@ -121,6 +121,8 @@ class PandasChain():
     # to the chain list, increment the seq_id and create a new block as the current block
     def __commit_block(self,block): 
         # Add code here
+        
+        #Change block's status
         block.set_status('COMMITED')
         
         # Create block hash
@@ -133,12 +135,16 @@ class PandasChain():
         #Create merkle root hash
         block.get_simple_merkle_root()
         
-        
+        #Append the block to the chain list
         self.__chain.append(block)
         
+        #Get sequence id
         seq_id = block.get_seq_id()
+        
+        #Increment the sequence id
         seq_id += 1
         
+        #Vreate a new block as the current block
         self.__current_block = Block(seq_id,block_hash)
         
     
@@ -220,12 +226,15 @@ class Block(PandasChain):
         self.__merkle_tx_hash = str(hashlib.sha256(str(''.join(list(self.__transactions['TxHash'].values))).encode('utf-8')))
         return self.__merkle_tx_hash
     
+    #Return values of all transactions
     def get_values(self):
         return list(self.__transactions['Value'].values)
-
+    
+    #Return sequence id
     def get_seq_id(self):
         return self.__seq_id
     
+    #Ipdate sequence id
     def set_seq_id(self,seq_id):
         self.__seq_id = seq_id
         return self.__seq_id
