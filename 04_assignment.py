@@ -165,24 +165,13 @@ class PandasChain():
     
     # 10 pts - Returns all of the values (Pandas coins transferred) of all transactions from every block as a single list
     def get_values(self):
-        values = []
+        values = pd.DataFrame()
         #Iterate through commited blocks
         for block in self.__chain:
-            values += block.get_values()
+            values = pd.concat([values,block.get_values()])
             #Add transactions of uncommited block
-            values += self.__current_block.get_values()
-        return values
-        
-     
-     # Returns all of the timestemps of all transactions from every block as a single list
-    def get_timestemps(self):
-        times = []
-        #Iterate through commited blocks
-        for block in self.__chain:
-            times += block.get_timestemps()
-            #Add transactions of uncommited block
-            times += self.__current_block.get_timestemps()
-        return times   
+            values = pd.concat([values,self.__current_block.get_values()])
+        return values 
     
             
 class Block(PandasChain):
@@ -250,13 +239,9 @@ class Block(PandasChain):
         self.__merkle_tx_hash = str(hashlib.sha256(str(''.join(list(self.__transactions['TxHash'][self.__seq_id*10-10:self.__seq_id*10+1].values))).encode('utf-8')))
         return self.__merkle_tx_hash
     
-    #Return values of all transactions
-    def get_values(self):
-        return list(self.__transactions['Value'].values)
-
     #Return timestemps and values of block transactions
-    def get_timestemps(self):
-        return list(self.__transactions['Timestamp'].values)    
+    def get_values(self):
+        return self.__transactions[['Value','Timestamp']]   
     
     #Return sequence id
     def get_seq_id(self):
@@ -296,10 +281,11 @@ class TestAssignment4(unittest.TestCase):
         pandas_chain.add_transaction("Bob","Alice",53)
         pandas_chain.add_transaction("Bob","Alice",53)
         self.assertEqual(pandas_chain.get_number_of_blocks(),3)
-        plt.plot(list(np.arange(1,1+len(pandas_chain.get_values()))),pandas_chain.get_values())
+        #plt.plot(list(np.arange(1,1+len(pandas_chain.get_values()))),pandas_chain.get_values())
+        plt.plot(list(np.arange(1,1+len(pandas_chain.get_values().iloc[:,1]))),pandas_chain.get_values().iloc[:,1])
         plt.show()
         #Test for timestemp graph
-        plt.plot(pandas_chain.get_timestemps(),pandas_chain.get_values())
+        plt.plot(pandas_chain.get_values().iloc[:,1],pandas_chain.get_values().iloc[:,0])
         plt.show()
 
 if __name__ == '__main__':
