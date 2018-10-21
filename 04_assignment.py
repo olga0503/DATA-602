@@ -82,14 +82,14 @@ import pandas as pd
 import unittest
 import uuid
 
+#parent class
 class PandasChain():
     
-    
     # 5 pts - Complete this constructor
-    def __init__(self,name,*args):
-        
-        self.__name = str.upper(name) # Convert name to upper case and store it here 
-        self.__current_block = Block(args[0],args[1])# Create a new Block 
+    #def __init__(self,name,*args): #accepts child class arguments but causes reqursion
+    def __init__(self,name):   
+        self.__name = str.upper(str(name)) # Convert name to upper case and store it here 
+        self.__current_block = Block(int(Block.seq_ids[-1]),Block.prev_hashs[-1])# Create a new Block 
         self.__name = str.upper(name)# Convert name to upper case and store it here
         self.__chain = [] # Create an empty list
         self.__id = str(hashlib.sha256(str(str(uuid.uuid4())+self.__name+str(dt.datetime.now())).encode('utf-8')).hexdigest())
@@ -127,12 +127,13 @@ class PandasChain():
         
         # Create block hash
         block_hash = str(hashlib.sha256(str(block.get_simple_merkle_root).encode('utf-8')))
+        # Set block hash 
         block.set_block_hash(block_hash)
         
         #Set the prev_hash to the previous block's hash
         self.__prev_hash = block_hash
         
-        #Create merkle root hash
+        #Get merkle root hash
         block.get_simple_merkle_root()
         
         #Append the block to the chain list
@@ -141,10 +142,10 @@ class PandasChain():
         #Get sequence id
         seq_id = block.get_seq_id()
         
-        #Increment the sequence id
+        #Increment sequence id
         seq_id += 1
         
-        #Vreate a new block as the current block
+        #Create a new block as the current block
         self.__current_block = Block(seq_id,block_hash)
         
     
@@ -164,12 +165,33 @@ class PandasChain():
     
     # 10 pts - Returns all of the values (Pandas coins transferred) of all transactions from every block as a single list
     def get_values(self):
-        list([block.get_values() for block in self.__chain]+[self.__current_block.get_values()])
+        values = []
+        #Iterate through commited blocks
+        for block in self.__chain:
+            values += block.get_values()
+            #Add transactions of uncommited block
+            values += self.__current_block.get_values()
+        return values
         
-        
+     
+     # Returns all of the timestemps of all transactions from every block as a single list
+    def get_timestemps(self):
+        times = []
+        #Iterate through commited blocks
+        for block in self.__chain:
+            times += block.get_timestemps()
+            #Add transactions of uncommited block
+            times += self.__current_block.get_timestemps()
+        return times   
     
             
 class Block(PandasChain):
+
+    #stores sequence ids
+    seq_ids = []
+    #stores previous hashes
+    prev_hashs = []
+    
     # 5 pts for constructor
     def __init__(self,seq_id,prev_hash): 
         self.__seq_id = seq_id # Set to what's passed in from constructor
@@ -179,7 +201,9 @@ class Block(PandasChain):
         self.__status = 'UNCOMMITTED'
         self.__block_hash = None
         self.__merkle_tx_hash = None
-        super().__init__(self,seq_id,prev_hash)
+        self.seq_ids += str(seq_id) #Add sequence id to the list
+        self.prev_hashs += str(prev_hash) #Add previous hash to the list
+        #super().__init__(self,seq_id,prev_hash) #passing arguments to the parent class causes reqursion
         
        
     #5 pts -  Display on a single line the metadata of this block. You'll display the sequence Id, status, 
@@ -223,21 +247,21 @@ class Block(PandasChain):
     # hash that string producing a "merkle root" - Note, this is not how merkle tries work but is instructive 
     # and indicative in terms of the intent and purpose of merkle tries
     def get_simple_merkle_root(self): 
-        self.__merkle_tx_hash = str(hashlib.sha256(str(''.join(list(self.__transactions['TxHash'].values))).encode('utf-8')))
+        self.__merkle_tx_hash = str(hashlib.sha256(str(''.join(list(self.__transactions['TxHash'][self.__seq_id*10-10:self.__seq_id*10+1].values))).encode('utf-8')))
         return self.__merkle_tx_hash
     
     #Return values of all transactions
     def get_values(self):
         return list(self.__transactions['Value'].values)
+
+    #Return timestemps and values of block transactions
+    def get_timestemps(self):
+        return list(self.__transactions['Timestamp'].values)    
     
     #Return sequence id
     def get_seq_id(self):
         return self.__seq_id
     
-    #Ipdate sequence id
-    def set_seq_id(self,seq_id):
-        self.__seq_id = seq_id
-        return self.__seq_id
 
 
 class TestAssignment4(unittest.TestCase):
@@ -273,6 +297,9 @@ class TestAssignment4(unittest.TestCase):
         pandas_chain.add_transaction("Bob","Alice",53)
         self.assertEqual(pandas_chain.get_number_of_blocks(),3)
         plt.plot(list(np.arange(1,1+len(pandas_chain.get_values()))),pandas_chain.get_values())
+        plt.show()
+        #Test for timestemp graph
+        plt.plot(pandas_chain.get_timestemps(),pandas_chain.get_values())
         plt.show()
 
 if __name__ == '__main__':
