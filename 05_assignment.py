@@ -57,12 +57,16 @@ main_page = '''
 
 from flask import Flask
 app = Flask(__name__)
+
 @app.route('/')
-def hello():
+#loads html template
+def index():
 	return main_page
 
 @app.route("/calc", methods = ['POST'])
+#performs multiplication
 def calc():
+	#reads entered number
 	num = request.form['number']
 	#if entry is not blank return the result
 	if num != "":
