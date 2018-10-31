@@ -144,7 +144,7 @@ def exercise09():
     # ------ Place code below here \/ \/ \/ ------
     
     #load json data
-    resp = requests.get(url='https://api.coindesk.com/v1/bpi/historical/close.json')
+    resp = requests.get(url='https://api.coindesk.com/v1/bpi/historical/close.json',headers=header)
     data = resp.json()
 
     #convert json data to pandas dataframe
