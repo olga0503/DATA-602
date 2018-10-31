@@ -219,7 +219,7 @@ def exercise13(n):
     # ------ Place code below here \/ \/ \/ ------
 
     s = pd.Series(np.random.randint(0,n,size=n),index=pd.date_range('1/1/2010', periods=n, freq='D'))
-    s.plot.line()
+    s.cumsum().plot.line()
     
     # ------ Place code above here /\ /\ /\ ------ 
     return s
