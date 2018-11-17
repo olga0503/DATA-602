@@ -14,6 +14,9 @@ Assignment #6
 import numpy as np, pandas as pd, matplotlib.pyplot as plt
 import unittest
 import requests
+import plotly
+import plotly.plotly as py
+import plotly.graph_objs as go
 
 # ------ Place code below here \/ \/ \/ ------
 # import plotly library and enter credential info here
@@ -148,7 +151,7 @@ def exercise09():
     data = resp.json()
 
     #convert json data to pandas dataframe
-    df = pd.DataFrame(data).loc['2017-09-1':'2018-10-05']
+    df = pd.DataFrame(data).loc['2017-09-01':'2018-10-05']
 
     #drop the disclaimer column
     df.drop(columns='disclaimer', inplace=True) 
@@ -159,11 +162,10 @@ def exercise09():
     #name index column
     df.index.name = 'Date'
 
-    #save DataFrame to csv file
-    #df.to_csv('Bitcoin_Prices.csv')
-
     #plot a price timeseries and publish it to Plot.ly and set the URL to the chart to the plotly_url variable
-    plotly_url = 'https://plot.ly/~ofomicheva86/7/#/plot'
+    plotly.tools.set_credentials_file(username='ofomicheva86', api_key='hjtL8ogpC6qEogg4V8IH')
+    trace = go.Scatter(x=df.index, y=df['bpi'])
+    data = [trace]
 
     #print the head
     print(df.head())
@@ -172,7 +174,7 @@ def exercise09():
     print(df.tail())
 
     # ------ Place code above here /\ /\ /\ ------    
-    return df, plotly_url
+    return df, py.plot(data, filename = 'basic-line', auto_open=True)
 
 
 def exercise10(n):
