@@ -96,7 +96,7 @@ def get_credentials():
     return {'user':'root','password':'off110650'}
 
 class Iris:
-    def __init__(self,creds,dbname='data602cc',new=True):
+    def __init__(self,creds,dbname='data602',new=True):
         self.__conn = mc.connect(user=creds['user'],password = creds['password'])# connect and store the connection object 
         self.__dbname  = dbname# store the database name
         self.cursor = self.__conn.cursor()
