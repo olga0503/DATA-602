@@ -79,16 +79,16 @@ def main():
     creds = get_credentials()
     iris = Iris(creds) # Create a MySQL database called data602
     iris.load() # Load Iris data from sklearn and pump it into IRIS_DATA table
-    iris.display_gt(140) # Display to the screen all rows with ID greater than 140
+    #iris.display_gt(140) # Display to the screen all rows with ID greater than 140
     
-    iris2 = Iris(creds,dbname='anotherone') # Creates a 2nd MySQL database called anotherone, you now have 2 databases (one server still, tho)
-    iris2.load() # Load Iris data
-    iris2.del_observations([0,1,2]) # Delete observations that have id equal to 0, 1 or 2
+    #iris2 = Iris(creds,dbname='anotherone') # Creates a 2nd MySQL database called anotherone, you now have 2 databases (one server still, tho)
+    #iris2.load() # Load Iris data
+    #iris2.del_observations([0,1,2]) # Delete observations that have id equal to 0, 1 or 2
 
-    iris.update_observation(0,'stuff',5) # Change observation id 0 to a different label
+    #iris.update_observation(0,'stuff',5) # Change observation id 0 to a different label
 
-    iris.close() # Close connection
-    iris2.close() # Close connection
+    #iris.close() # Close connection
+    #iris2.close() # Close connection
     
 
 # Change password
@@ -137,7 +137,7 @@ class Iris:
         iris_data['target_species'] = iris.target
         
         
-        self.cursor.execute('INSERT INTO data602 (id, feature_sepal_length, feature_sepal_width, feature_petal_length, feature_petal_width, target_species, target_species_id) VALUES({},{},{},{},{},{},{})'.format(range(1,len(iris_data)+1),iris_data['sepal length (cm)'],iris_data['sepal width (cm)'],iris_data['petal length (cm)'],iris_data['petal width (cm)'], iris_data['target_species'],range(1,len(iris_data)+1)))
+        self.cursor.execute('INSERT INTO data602 (id, feature_sepal_length, feature_sepal_width, feature_petal_length, feature_petal_width, target_species, target_species_id) VALUES({},{},{},{},{},{},{})'.format(list(range(1,len(iris_data)+1)),iris_data['sepal length (cm)'],iris_data['sepal width (cm)'],iris_data['petal length (cm)'],iris_data['petal width (cm)'], iris_data['target_species'],list(range(1,len(iris_data)+1)))
         self.cursor.commit()
 
         # ------ Place code above here /\ /\ /\ ------
@@ -235,5 +235,5 @@ class TestAssignment8(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    #main()
-    unittest.main()
+    main()
+    #unittest.main()
