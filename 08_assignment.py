@@ -103,6 +103,7 @@ class Iris:
         
         if new:
             # if new, create database / table
+
             self.cursor.execute('CREATE DATABASE {}'.format(dbname))
             self.cursor.execute('USE {}'.format(dbname))
             self.__create()
@@ -132,16 +133,20 @@ class Iris:
             print('Iris table truncated')
         # ------ Place code below here \/ \/ \/ ------
         
+        #load iris dataset
         iris = ds.load_iris()
         iris_data = pd.DataFrame(iris.data, columns=iris.feature_names)
-        iris_data['target_species'] = iris.target
         iris_data['id'] = list(range(0,len(iris_data)))
         iris_data['target_species_id'] = list(range(0,len(iris_data)))
+        target_names = list(iris.target_names)
+        #iris_data['target_species'] = list(map(lambda x: iris.target_names[x],iris.target))
+        iris_data['target_species'] = iris.target
         
-        for i in range(0,len(iris_data)-1):
-              self.cursor.execute("INSERT INTO iris_data (id, feature_sepal_length, feature_sepal_width,"
-              	                  "feature_petal_length, feature_petal_width, target_species, target_species_id)"
-              	                  "VALUES({},{},{},{},{},{},{});".format(iris_data.iloc[i]['id'],iris_data.iloc[i]['sepal length (cm)'],iris_data.iloc[i]['sepal width (cm)'],iris_data.iloc[i]['petal length (cm)'],iris_data.iloc[i]['petal width (cm)'], iris_data.iloc[i]['target_species'],iris_data.iloc[i]['target_species_id']))
+        for i in range(0,len(iris_data)):
+              insert_row=("INSERT INTO iris_data (id, feature_sepal_length, feature_sepal_width,"
+              	          "feature_petal_length, feature_petal_width, target_species, target_species_id)"
+              	          "VALUES({},{},{},{},{},{},{});".format(iris_data.iloc[i]['id'],iris_data.iloc[i]['sepal length (cm)'],iris_data.iloc[i]['sepal width (cm)'],iris_data.iloc[i]['petal length (cm)'],iris_data.iloc[i]['petal width (cm)'], iris_data.iloc[i]['target_species'],iris_data.iloc[i]['target_species_id']))
+              self.cursor.execute(insert_row)
               self.__conn.commit()
 
         # ------ Place code above here /\ /\ /\ ------
@@ -157,8 +162,7 @@ class Iris:
                         "feature_petal_length FLOAT NOT NULL,"
                         "feature_petal_width FLOAT NOT NULL,"
                         "target_species VARCHAR(20) NOT NULL,"
-                        "target_species_id INT NOT NULL"
-                        ");")
+                        "target_species_id INT NOT NULL);")
         
         self.cursor.execute(create_table)
 
@@ -169,6 +173,10 @@ class Iris:
         # ------ Place code below here \/ \/ \/ ------
         
         self.cursor.execute('SELECT * FROM iris_data WHERE id > {};'.format(n))
+        result = self.cursor.fetchall()
+        result_data = pd.DataFrame(result,columns=['id','feature_sepal_length','feature_sepal_width', 'feature_petal_length',
+                                                 'feature_petal_width', 'target_species', 'target_species_id'])
+        print(result_data)
 
         # ------ Place code above here /\ /\ /\ ------
 
@@ -176,9 +184,13 @@ class Iris:
     def update_observation(self,id,new_target_species,new_target_species_id):
         # ------ Place code below here \/ \/ \/ ------
         
-        self.cursor.execute("UPDATE iris_data SET target_species_id = {}, target_species = {}"
-                            "WHERE id = {};".format(new_target_species_id,new_target_species,id))
-        self.__conn.commit()
+        try:
+
+             self.cursor.execute("UPDATE iris_data SET target_species = {}, target_species_id = {}, WHERE id = {};".format(new_target_species,new_target_species_id,id))
+             self.__conn.commit()
+
+        except:
+             print('invalid sintax')
 
         # ------ Place code above here /\ /\ /\ ------
 
@@ -210,10 +222,12 @@ class Iris:
     def get_row_count(self):
         # ------ Place code below here \/ \/ \/ ------
         
-        count = self.cursor.execute('SELECT COUNT(id) FROM iris_data')
-
+        self.cursor.execute('SELECT * FROM iris_data')
+        count = len(self.cursor.fetchall())
+        print('Row count is'+ str(count))
+#
         # ------ Place code above here /\ /\ /\ ------
-        return count    
+        return count
 
 class TestAssignment8(unittest.TestCase):
     def test(self):
