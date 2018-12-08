@@ -79,16 +79,16 @@ def main():
     creds = get_credentials()
     iris = Iris(creds) # Create a MySQL database called data602
     iris.load() # Load Iris data from sklearn and pump it into IRIS_DATA table
-    #iris.display_gt(140) # Display to the screen all rows with ID greater than 140
+    iris.display_gt(140) # Display to the screen all rows with ID greater than 140
     
-    #iris2 = Iris(creds,dbname='anotherone') # Creates a 2nd MySQL database called anotherone, you now have 2 databases (one server still, tho)
-    #iris2.load() # Load Iris data
-    #iris2.del_observations([0,1,2]) # Delete observations that have id equal to 0, 1 or 2
+    iris2 = Iris(creds,dbname='anotherone') # Creates a 2nd MySQL database called anotherone, you now have 2 databases (one server still, tho)
+    iris2.load() # Load Iris data
+    iris2.del_observations([0,1,2]) # Delete observations that have id equal to 0, 1 or 2
 
-    #iris.update_observation(0,'stuff',5) # Change observation id 0 to a different label
+    iris.update_observation(0,'stuff',5) # Change observation id 0 to a different label
 
-    #iris.close() # Close connection
-    #iris2.close() # Close connection
+    iris.close() # Close connection
+    iris2.close() # Close connection
     
 
 # Change password
@@ -135,11 +135,13 @@ class Iris:
         iris = ds.load_iris()
         iris_data = pd.DataFrame(iris.data, columns=iris.feature_names)
         iris_data['target_species'] = iris.target
-        iris_data['id'] = list(range(1,len(iris_data)+1))
-        iris_data['target_species_id'] = list(range(1,len(iris_data)+1))
+        iris_data['id'] = list(range(0,len(iris_data)))
+        iris_data['target_species_id'] = list(range(0,len(iris_data)))
         
         for i in range(0,len(iris_data)-1):
-              self.cursor.execute('INSERT INTO iris_data (id, feature_sepal_length, feature_sepal_width, feature_petal_length, feature_petal_width, target_species, target_species_id) VALUES({},{},{},{},{},{},{});'.format(iris_data.iloc[i]['id'],iris_data.iloc[i]['sepal length (cm)'],iris_data.iloc[i]['sepal width (cm)'],iris_data.iloc[i]['petal length (cm)'],iris_data.iloc[i]['petal width (cm)'], iris_data.iloc[i]['target_species'],iris_data.iloc[i]['target_species_id']))
+              self.cursor.execute("INSERT INTO iris_data (id, feature_sepal_length, feature_sepal_width,"
+              	                  "feature_petal_length, feature_petal_width, target_species, target_species_id)"
+              	                  "VALUES({},{},{},{},{},{},{});".format(iris_data.iloc[i]['id'],iris_data.iloc[i]['sepal length (cm)'],iris_data.iloc[i]['sepal width (cm)'],iris_data.iloc[i]['petal length (cm)'],iris_data.iloc[i]['petal width (cm)'], iris_data.iloc[i]['target_species'],iris_data.iloc[i]['target_species_id']))
               self.__conn.commit()
 
         # ------ Place code above here /\ /\ /\ ------
@@ -174,7 +176,8 @@ class Iris:
     def update_observation(self,id,new_target_species,new_target_species_id):
         # ------ Place code below here \/ \/ \/ ------
         
-        self.cursor.execute('UPDATE iris_data SET target_species = {}, target_species_id = {} WHERE id = {};'.format(new_target_species,new_target_species_id,id))
+        self.cursor.execute("UPDATE iris_data SET target_species_id = {}, target_species = {}"
+                            "WHERE id = {};".format(new_target_species_id,new_target_species,id))
         self.__conn.commit()
 
         # ------ Place code above here /\ /\ /\ ------
@@ -183,7 +186,7 @@ class Iris:
     def del_observations(self,row_ids):
         # ------ Place code below here \/ \/ \/ ------
    
-        self.cursor.execute('DELETE FROM iris_data WHERE id in ({},{});'.format(row_ids[0],row_ids[len(row_ids[0])-1]))
+        self.cursor.execute("DELETE FROM iris_data WHERE id IN {};".format(tuple(row_ids)))
         self.__conn.commit()
 
         # ------ Place code above here /\ /\ /\ ------
@@ -238,5 +241,5 @@ class TestAssignment8(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    main()
-    #unittest.main()
+    #main()
+    unittest.main()
