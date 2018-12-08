@@ -135,10 +135,12 @@ class Iris:
         iris = ds.load_iris()
         iris_data = pd.DataFrame(iris.data, columns=iris.feature_names)
         iris_data['target_species'] = iris.target
+        iris_data['id'] = list(range(1,len(iris_data)+1))
+        iris_data['target_species_id'] = list(range(1,len(iris_data)+1))
         
-        
-        self.cursor.execute('INSERT INTO data602 (id, feature_sepal_length, feature_sepal_width, feature_petal_length, feature_petal_width, target_species, target_species_id) VALUES({},{},{},{},{},{},{})'.format(list(range(1,len(iris_data)+1)),iris_data['sepal length (cm)'],iris_data['sepal width (cm)'],iris_data['petal length (cm)'],iris_data['petal width (cm)'], iris_data['target_species'],list(range(1,len(iris_data)+1)))
-        self.__conn.commit()
+        for i in range(0,len(iris_data)-1):
+              self.cursor.execute('INSERT INTO iris_data (id, feature_sepal_length, feature_sepal_width, feature_petal_length, feature_petal_width, target_species, target_species_id) VALUES({},{},{},{},{},{},{});'.format(iris_data.iloc[i]['id'],iris_data.iloc[i]['sepal length (cm)'],iris_data.iloc[i]['sepal width (cm)'],iris_data.iloc[i]['petal length (cm)'],iris_data.iloc[i]['petal width (cm)'], iris_data.iloc[i]['target_species'],iris_data.iloc[i]['target_species_id']))
+              self.__conn.commit()
 
         # ------ Place code above here /\ /\ /\ ------
         print('Iris dataset loaded')  
@@ -155,6 +157,7 @@ class Iris:
                         "target_species VARCHAR(20) NOT NULL,"
                         "target_species_id INT NOT NULL"
                         ");")
+        
         self.cursor.execute(create_table)
 
         # ------ Place code above here /\ /\ /\ ------
