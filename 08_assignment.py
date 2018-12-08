@@ -138,7 +138,7 @@ class Iris:
         
         
         self.cursor.execute('INSERT INTO data602 (id, feature_sepal_length, feature_sepal_width, feature_petal_length, feature_petal_width, target_species, target_species_id) VALUES({},{},{},{},{},{},{})'.format(list(range(1,len(iris_data)+1)),iris_data['sepal length (cm)'],iris_data['sepal width (cm)'],iris_data['petal length (cm)'],iris_data['petal width (cm)'], iris_data['target_species'],list(range(1,len(iris_data)+1)))
-        self.cursor.commit()
+        self.__conn.commit()
 
         # ------ Place code above here /\ /\ /\ ------
         print('Iris dataset loaded')  
@@ -172,7 +172,7 @@ class Iris:
         # ------ Place code below here \/ \/ \/ ------
         
         self.cursor.execute('UPDATE iris_data SET target_species = {}, target_species_id = {} WHERE id = {};'.format(new_target_species,new_target_species_id,id))
-        self.cursor.commit()
+        self.__conn.commit()
 
         # ------ Place code above here /\ /\ /\ ------
 
@@ -181,7 +181,7 @@ class Iris:
         # ------ Place code below here \/ \/ \/ ------
    
         self.cursor.execute('DELETE FROM iris_data WHERE id in ({},{});'.format(row_ids[0],row_ids[len(row_ids[0])-1]))
-        self.cursor.commit()
+        self.__conn.commit()
 
         # ------ Place code above here /\ /\ /\ ------
 
@@ -190,7 +190,7 @@ class Iris:
         # ------ Place code below here \/ \/ \/ ------
         
         self.cursor.execute('TRUNCATE TABLE  iris_data;')
-        self.cursor.commit()
+        self.__conn.commit()
 
         # ------ Place code above here /\ /\ /\ ------
 
