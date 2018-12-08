@@ -235,5 +235,5 @@ class TestAssignment8(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    main()
-    #unittest.main()
+    #main()
+    unittest.main()
